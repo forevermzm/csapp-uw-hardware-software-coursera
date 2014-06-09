@@ -15,7 +15,7 @@ def filepath(p):
     # Convert string to absolute, expanded filepath.
     return os.path.abspath(os.path.expanduser(p))
 
-session_name = 'hwswinterface-001'
+session_name = 'hwswinterface-002'
 
 # You may specify your credentials here so you
 # don't have to enter them over and over.
