@@ -120,7 +120,9 @@ NOTES:
  *   Rating: 1
  */
 int bitAnd(int x, int y) {
-  return 2;
+  // Morgan's Law: ~(~x | ~y) = x & y.
+  int result = ~( ~x | ~y );
+  return result;
 }
 /* 
  * bitXor - x^y using only ~ and & 
@@ -130,7 +132,10 @@ int bitAnd(int x, int y) {
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  return 2;
+  // x^y = (x & ~y) | (~x & y) 
+  // x | y = ~(~x & ~y)
+  // ~ (~ (x & ~y) & ~ (~x & y))
+  return ~ (~ (x & ~y) & ~ (~x & y));
 }
 /* 
  * thirdBits - return word with every third bit (starting from the LSB) set to 1
@@ -140,7 +145,8 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int thirdBits(void) {
-  return 2;
+  int result = 0x49249249;
+  return result;
 }
 // Rating: 2
 /* 

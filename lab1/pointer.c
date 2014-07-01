@@ -85,8 +85,12 @@ int intSize() {
   int * intPtr1;
   int * intPtr2;
   // TODO: Write code to compute size of an integer.
+  intPtr1 = &intArray[0];
+  intPtr2 = &intArray[1];
 
-  return 2;
+  int int1 = (int) intPtr1;
+  int int2 = (int) intPtr2;
+  return int2 - int1;
 }
 
 /*
@@ -97,8 +101,12 @@ int doubleSize() {
   double * doubPtr1;
   double * doubPtr2;
   // TODO: Write code to compute size of a double.
+  doubPtr1 = &doubArray[0];
+  doubPtr2 = &doubArray[1];
 
-  return 2;
+  int doub1 = (int) doubPtr1;
+  int doub2 = (int) doubPtr2;
+  return doub2 - doub1;
 }
 
 /*
