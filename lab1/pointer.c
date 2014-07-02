@@ -88,8 +88,8 @@ int intSize() {
   intPtr1 = &intArray[0];
   intPtr2 = &intArray[1];
 
-  int int1 = (int) intPtr1;
-  int int2 = (int) intPtr2;
+  long int1 = (long) intPtr1;
+  long int2 = (long) intPtr2;
   return int2 - int1;
 }
 
@@ -104,8 +104,8 @@ int doubleSize() {
   doubPtr1 = &doubArray[0];
   doubPtr2 = &doubArray[1];
 
-  int doub1 = (int) doubPtr1;
-  int doub2 = (int) doubPtr2;
+  long doub1 = (long) doubPtr1;
+  long doub2 = (long) doubPtr2;
   return doub2 - doub1;
 }
 
@@ -117,8 +117,12 @@ int pointerSize() {
   double ** ptrPtr1;
   double ** ptrPtr2;
   // TODO: Write code to compute size of a pointer.
+  ptrPtr1 = &ptrArray[0];
+  ptrPtr2 = &ptrArray[1];
 
-  return 2;
+  long ptr1 = (long) ptrPtr1;
+  long ptr2 = (long) ptrPtr2;
+  return ptr2 - ptr1;
 }
 
 /*
@@ -131,7 +135,8 @@ int changeValue() {
   int * intPtr2;
   // TODO: Write code to change value of intArray[5] to 351 using only
   //       intPtr1 and the + operator.
-
+  intPtr1 += 5;
+  *intPtr1 = 351;
   return intArray[5];
 }
 
@@ -144,7 +149,10 @@ int changeValue() {
  */
 int withinSameBlock(int * ptr1, int * ptr2) {
   // TODO
-  return 2;
+  int ptr1BlockNumber = (((long) ptr1) >> 6);
+  int ptr2BlockNumber = (((long) ptr2) >> 6);
+  int blockDifference = ptr1BlockNumber - ptr2BlockNumber;
+  return !blockDifference;
 }
 
 /*
@@ -153,7 +161,10 @@ int withinSameBlock(int * ptr1, int * ptr2) {
  */
 int withinArray(int * intArray, int size, int * ptr) {
   // TODO
-  return 2;
+  int difference = ptr - intArray;
+  int isBiggerThanStart = ( difference  >> 31) & 0x1;	//Either 0 or 1.
+  int isSmallerThanEnd = (( size - 1 - difference ) >> 31 ) & 0x1;
+  return (!isBiggerThanStart) & (!isSmallerThanEnd);
 }
 /*
  * Return x with the n bits that begin at position p inverted (i.e.,
@@ -162,5 +173,16 @@ int withinArray(int * intArray, int size, int * ptr) {
  */
 int invert(int x, int p, int n) {
   // TODO
-  return 2;
+  int mask = (~((0x1 << 31 ) >> (31 - p - n))) - (~ ((0x1 << 31) >> (31 - p))) ;
+  return x ^ mask;
 }
+
+
+
+
+
+
+
+
+
+

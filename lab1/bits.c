@@ -145,7 +145,12 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int thirdBits(void) {
-  int result = 0x49249249;
+  int result = 0x49;
+  int addOn = 0x9;
+  result = (result << 6) + addOn;
+  result = (result << 6) + addOn;
+  result = (result << 6) + addOn;
+  result = (result << 6) + addOn;
   return result;
 }
 // Rating: 2
@@ -159,7 +164,12 @@ int thirdBits(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  return 2;
+  int max = (0x1 << (n + ~0));
+  int sign = x >> 31;
+  int firstPart = sign & (!((x + max) >> 31));	// x is negative, x should >= -2^(n-1). 
+  int secondPart = ((!sign) & (!((max + ~x) >> 31)));	// x is positive, x should <= 2^(n-1) - 1
+  int result = firstPart + secondPart; 
+  return result;
 }
 /* 
  * sign - return 1 if positive, 0 if zero, and -1 if negative
@@ -170,7 +180,8 @@ int fitsBits(int x, int n) {
  *  Rating: 2
  */
 int sign(int x) {
-  return 2;
+  int sign = (x >> 31);		//If x is negative, sign is -1, otherwise 0.
+  return (!!x) | sign;		//!!x is 0 if x is 0, otherwise !!x is 1.
 }
 /* 
  * getByte - Extract byte n from word x
@@ -181,7 +192,8 @@ int sign(int x) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  return 2;
+  int result = x >> (n << 3) & 0xFF;
+  return result;
 }
 // Rating: 3
 /* 
@@ -193,7 +205,8 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-  return 2;
+  int mask = ~((!!n) << 31);	//if n is zero, mask is TMin, oterhwise n is TMax. 
+  return ( mask >> (n + ((~mask) >> 31))) & (x >> n);
 }
 /* 
  * addOK - Determine if can compute x+y without overflow
@@ -204,7 +217,14 @@ int logicalShift(int x, int n) {
  *   Rating: 3
  */
 int addOK(int x, int y) {
-  return 2;
+  int signX = (x >> 31) & 0x1;
+  int signY = (y >> 31) & 0x1;
+  int isSameSign = !(signX ^ signY);	// Check if x and y are both positive or negative.
+  
+  int addResultSign = ((x + y) >> 31) & 0x1;
+
+  int result = (((isSameSign << 31) >> 31) & (! ( signX ^ addResultSign ))) + ((((!isSameSign) << 31 ) >> 31) & 0x1);
+  return result;
 }
 // Rating: 4
 /* 
@@ -215,7 +235,12 @@ int addOK(int x, int y) {
  *   Rating: 4 
  */
 int bang(int x) {
-  return 2;
+  int sign = (x >> 31) & 0x1;	// sign is 0 or 1 now.
+  int reverse = ~x + 1;		// reverse is -x.
+  int reverseSign = ( reverse >> 31 ) & 0x1;	// reverse sign is the sign of -x.
+  int result = sign | reverseSign;		// result is now 0 if x is 0, otherwise 1.
+  result = result ^ 0x1;
+  return result;
 }
 // Extra Credit: Rating: 3
 /* 
@@ -226,8 +251,14 @@ int bang(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  int sign = (x >> 31) & 0x1;	// sign is 0 or 1 now.
+  int reverse = ~x + 1;		// reverse is -x.                                    return 2;
+  int reverseSign = ( reverse >> 31 ) & 0x1;	// reverse sign is the sign of -x.    }
+  int condition = sign | reverseSign;		// result is now 0 if x is 0, otherwise 1.
+  int result = (((condition << 31) >> 31) & y) + ((( (!condition) << 31 ) >> 31) & z);  
+  return result;
 }
+
 // Extra Credit: Rating: 4
 /*
  * isPower2 - returns 1 if x is a power of 2, and 0 otherwise
@@ -238,5 +269,27 @@ int conditional(int x, int y, int z) {
  *   Rating: 4
  */
 int isPower2(int x) {
-  return 2;
+  int sig = x>>31;
+  int minus1 = ~0;
+  int xminus1 = x+ minus1;
+  sig = ~sig;
+  return (!(xminus1&x))&sig&(!!x);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
