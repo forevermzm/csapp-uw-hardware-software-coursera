@@ -4,21 +4,21 @@ Lab 4 - Mystery Caches
 
 Mystery Cache Geometries (for you to keep notes):
 mystery0:
-    block size =
-    cache size =
-    associativity =
+    block size = 64
+    cache size = 4096
+    associativity = 32
 mystery1:
-    block size =
-    cache size =
-    associativity =
+    block size = 8
+    cache size = 8192
+    associativity = 8
 mystery2:
-    block size =
-    cache size =
-    associativity =
+    block size = 32
+    cache size = 32768
+    associativity = 2
 mystery3:
-    block size =
-    cache size =
-    associativity =
+    block size = 16
+    cache size = 4096
+    associativity = 1
 */
 
 #include <stdlib.h>
@@ -39,8 +39,16 @@ mystery3:
 */
 int get_block_size(void) {
   /* YOUR CODE GOES HERE */
-
-  return -1;
+  addr_t start = 0x0L;
+  addr_t i;
+  access_cache(start);    //First is a miss, this fetches the block into cache.
+  for (i = start ;; i ++)
+  {
+    if (access_cache(i) == FALSE)
+      break;
+  }
+  flush_cache();
+  return i - start;
 }
 
 /*
@@ -48,8 +56,20 @@ int get_block_size(void) {
 */
 int get_cache_size(int size) {
   /* YOUR CODE GOES HERE */
-
-  return -1;
+  addr_t start = 0x0L;
+  int i, j;
+  for (i = 2 ; ; i ++)
+  {
+    flush_cache();
+    access_cache(start);
+    for (j = 1 ; j < i; j ++){
+      access_cache(start + j * size);   //Increment the index and to check when the start address will be replaced.
+    }
+    if (access_cache(start) == FALSE)
+      break;
+  }
+  flush_cache();
+  return (j - 1) * size;
 }
 
 /*
@@ -57,8 +77,19 @@ int get_cache_size(int size) {
 */
 int get_cache_assoc(int size) {
   /* YOUR CODE GOES HERE */
-
-  return -1;
+  addr_t start = size;
+  int i, j;
+  for (i = 2 ;; i ++)
+  {
+    flush_cache();
+    access_cache(start);
+    for (j = 1 ; j < i ; j ++){
+      access_cache(start + size * j);
+    }
+    if (access_cache(start) == FALSE)
+      break;
+  }
+  return i - 1;
 }
 
 //// DO NOT CHANGE ANYTHING BELOW THIS POINT
