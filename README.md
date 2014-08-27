@@ -1,6 +1,6 @@
 ##This is solution to the assignments of CSAPP taught by UW at coursera.
 
-####These are my solutions to the assigments. 
+####These are my solutions to Hardware/Software Interface on coursera assigments. 
 
 + The course page is [here](https://class.coursera.org/hwswinterface-002)
 + The assignments can be found [here](https://class.coursera.org/hwswinterface-002/assignment)
